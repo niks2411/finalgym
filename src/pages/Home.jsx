@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-// Mock icons since we don't have lucide-react available
+// Mock icons
 const Heart = () => (
   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -74,9 +74,11 @@ const motion = {
       {children}
     </section>
   ),
-  div: ({ children, className, whileHover, ...props }) => (
+  div: ({ children, className, whileHover, initial, animate, exit, transition, style, onClick, ...props }) => (
     <div 
       className={`${className} ${whileHover ? 'hover:animate-gentle-bounce transform transition-all duration-300' : ''}`}
+      style={style}
+      onClick={onClick}
       {...props}
     >
       {children}
@@ -189,28 +191,103 @@ const benefits = [
   }
 ];
 
+const SmallTrainerPopup = ({ onClose, onBookProgram }) => {
+  const handleBrowse = () => {
+    onClose();
+  };
+
+  const handleClickOutside = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  return (
+    <div 
+      className="fixed inset-0 z-50 pointer-events-none"
+      onClick={handleClickOutside}
+    >
+      <motion.div 
+        className="fixed bottom-6 right-6 pointer-events-auto"
+        initial={{ opacity: 0, scale: 0.8, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.8, y: 20 }}
+        transition={{ 
+          type: 'spring', 
+          damping: 25, 
+          stiffness: 300,
+          duration: 0.6 
+        }}
+      >
+        <div className="bg-gradient-to-br from-slate-800 via-gray-800 to-slate-900 rounded-2xl p-5 shadow-2xl border border-purple-500/40 max-w-sm relative overflow-hidden">
+          {/* Animated background gradient */}
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 via-pink-500/10 to-orange-500/10 rounded-2xl animate-pulse"></div>
+          
+          <div className="relative">
+            <div className="flex items-start mb-4">
+              <div className="relative mr-4 flex-shrink-0">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg">
+                  R
+                </div>
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-slate-800"></div>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-sm font-bold text-white mb-1">Hi there! 👋</h3>
+                <p className="text-xs text-purple-300 font-medium">I'm Rahul, your wellness trainer</p>
+              </div>
+              <button
+                onClick={onClose}
+                className="ml-2 p-1 text-gray-400 hover:text-white hover:bg-gray-700 rounded-full transition-all duration-300"
+                aria-label="Close"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <p className="text-sm text-gray-300 mb-4 leading-relaxed">
+              Welcome to LeoFit360! Ready to transform your team's wellness journey? Let me help you find the perfect program.
+            </p>
+            
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  onClose();
+                  onBookProgram();
+                }}
+                className="flex-1 py-3 px-4 text-sm bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105 relative overflow-hidden group"
+              >
+                <span className="relative z-10">Book a Program</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </button>
+              <button
+                onClick={handleBrowse}
+                className="px-4 py-3 text-sm border-2 border-purple-600/50 text-purple-300 font-medium rounded-xl hover:bg-purple-600/20 hover:border-purple-500 transition-all duration-300 hover:scale-105"
+              >
+                Browse
+              </button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 export default function Home() {
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [showScroll, setShowScroll] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [showTrainerPopup, setShowTrainerPopup] = useState(false);
 
   // Navigation function to contact page
   const handleBookProgram = (program = null) => {
-    // Since we don't have React Router available in this environment,
-    // you'll need to replace this with your actual routing solution
+    // Simulate navigation
+    alert('Navigating to booking page...');
     
-    // For React Router, you would use:
-    // navigate('/contact', { state: { selectedProgram: program } });
-    
-    // For Next.js, you would use:
-    // router.push({ pathname: '/contact', query: { program: JSON.stringify(program) } });
-    
-    // For now, we'll simulate the navigation
-    window.location.href = '/contact';
-    
-    // If you need to pass the program data, you could use localStorage temporarily:
     if (program) {
-      localStorage.setItem('selectedProgram', JSON.stringify(program));
+      console.log('Selected program:', program);
     }
   };
 
@@ -226,6 +303,19 @@ export default function Home() {
     const onScroll = () => setShowScroll(window.scrollY > 300);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const hasSeenPopup = sessionStorage.getItem('hasSeenTrainerPopup');
+    
+    if (!hasSeenPopup) {
+      const timer = setTimeout(() => {
+        setShowTrainerPopup(true);
+        sessionStorage.setItem('hasSeenTrainerPopup', 'true');
+      }, 2000); // Show after 2 seconds for better user experience
+      
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   return (
@@ -477,6 +567,14 @@ export default function Home() {
           </div>
         </section>
       </div>
+
+      {/* Small Trainer Popup */}
+      {showTrainerPopup && (
+        <SmallTrainerPopup 
+          onClose={() => setShowTrainerPopup(false)}
+          onBookProgram={() => handleBookProgram()}
+        />
+      )}
 
       {/* Program Modal */}
       {selectedProgram && (
