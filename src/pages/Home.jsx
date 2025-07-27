@@ -283,12 +283,14 @@ export default function Home() {
 
   // Navigation function to contact page
   const handleBookProgram = (program = null) => {
-    // Simulate navigation
-    alert('Navigating to booking page...');
-    
+    // Store the selected program in localStorage for the contact page to access
     if (program) {
-      console.log('Selected program:', program);
+      localStorage.setItem('selectedProgram', JSON.stringify(program));
     }
+    
+    // Navigate to contact page (you'll need to implement this based on your routing)
+    // This could be React Router, Next.js router, or simple window.location
+    window.location.href = '/contact'; // or use your routing method
   };
 
   useEffect(() => {
