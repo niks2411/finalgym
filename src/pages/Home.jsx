@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // Mock icons
 const Heart = () => (
@@ -280,17 +280,31 @@ export default function Home() {
   const [showScroll, setShowScroll] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [showTrainerPopup, setShowTrainerPopup] = useState(false);
+  
+  // Ref for the programs section
+  const programsRef = useRef(null);
 
   // Navigation function to contact page
   const handleBookProgram = (program = null) => {
-    // Store the selected program in localStorage for the contact page to access
+    // Store the selected program in a variable for the contact page to access
     if (program) {
-      localStorage.setItem('selectedProgram', JSON.stringify(program));
+      // In a real app, you'd use state management or localStorage
+      console.log('Selected program:', program);
     }
     
     // Navigate to contact page (you'll need to implement this based on your routing)
     // This could be React Router, Next.js router, or simple window.location
-    window.location.href = '/contact'; // or use your routing method
+    alert('Navigating to contact page...'); // Replace with actual navigation
+  };
+
+  // Function to scroll to programs section
+  const scrollToPrograms = () => {
+    if (programsRef.current) {
+      programsRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
   };
 
   useEffect(() => {
@@ -384,14 +398,17 @@ export default function Home() {
               <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </motion.button>
 
-            <button className="px-12 py-5 text-lg font-bold border-2 border-purple-600 text-purple-400 rounded-2xl hover:bg-purple-600 hover:text-white transition-all duration-500 hover:scale-105">
+            <button 
+              onClick={scrollToPrograms}
+              className="px-12 py-5 text-lg font-bold border-2 border-purple-600 text-purple-400 rounded-2xl hover:bg-purple-600 hover:text-white transition-all duration-500 hover:scale-105"
+            >
               Learn More
             </button>
           </div>
         </motion.section>
 
         {/* Programs Section */}
-        <section className="py-20">
+        <section ref={programsRef} className="py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16 animate-fade-in">
               <h2 className="text-4xl md:text-5xl font-black mb-6 text-white">

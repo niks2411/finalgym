@@ -19,30 +19,13 @@ export default function About() {
   const [stats, setStats] = useState({ companies: 0, employees: 0, programs: 0, satisfaction: 0 });
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [showTrainerGreeting, setShowTrainerGreeting] = useState(false);
-
-  // Trainer greeting popup logic
-  useEffect(() => {
-    // Check if greeting has been shown in this session
-    const hasShownGreeting = sessionStorage.getItem('trainerGreetingShown');
-    
-    if (!hasShownGreeting) {
-      // Show popup after 2 seconds
-      const timer = setTimeout(() => {
-        setShowTrainerGreeting(true);
-        sessionStorage.setItem('trainerGreetingShown', 'true');
-      }, 2000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, []);
-
-  const closeTrainerGreeting = () => {
-    setShowTrainerGreeting(false);
+  // Navigation handlers
+  const handleGetStarted = () => {
+    // Navigate to contact page
+    window.location.href = '/contact';
   };
 
-  const handleBookProgram = () => {
-    setShowTrainerGreeting(false);
+  const handleRequestDemo = () => {
     // Navigate to contact page
     window.location.href = '/contact';
   };
@@ -504,6 +487,7 @@ export default function About() {
                       boxShadow: "0 20px 40px rgba(0, 0, 0, 0.3)"
                     }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={handleGetStarted}
                     className="px-10 py-4 text-lg font-bold bg-white text-purple-600 rounded-2xl hover:bg-gray-100 transition-all duration-500 flex items-center justify-center group relative overflow-hidden"
                   >
                     <span className="relative z-10 flex items-center">
@@ -520,6 +504,7 @@ export default function About() {
                   <motion.button 
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={handleRequestDemo}
                     className="px-10 py-4 text-lg font-bold border-2 border-white text-white rounded-2xl hover:bg-white hover:text-purple-600 transition-all duration-500"
                   >
                     Request Demo
@@ -531,78 +516,7 @@ export default function About() {
         </section>
       </div>
 
-      {/* Trainer Greeting Popup */}
-      {showTrainerGreeting && (
-        <div className="fixed inset-0 z-50 flex items-end justify-end p-6 pointer-events-none">
-          <motion.div
-            initial={{ scale: 0, opacity: 0, x: 50, y: 50 }}
-            animate={{ scale: 1, opacity: 1, x: 0, y: 0 }}
-            exit={{ scale: 0, opacity: 0, x: 50, y: 50 }}
-            transition={{ 
-              type: "spring", 
-              damping: 20, 
-              stiffness: 300,
-              duration: 0.6 
-            }}
-            className="bg-gradient-to-br from-slate-800 via-gray-700 to-slate-800 rounded-3xl p-6 shadow-2xl border border-gray-600/30 max-w-sm w-full pointer-events-auto relative overflow-hidden"
-          >
-            {/* Background gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-3xl"></div>
-            
-            {/* Close button */}
-            <button
-              onClick={closeTrainerGreeting}
-              className="absolute top-4 right-4 w-8 h-8 bg-gray-600/50 hover:bg-gray-500/50 rounded-full flex items-center justify-center transition-colors duration-200 z-10"
-            >
-              <X className="w-4 h-4 text-gray-300" />
-            </button>
-
-            <div className="relative z-10">
-              {/* Trainer Avatar */}
-              <div className="flex items-start mb-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center shadow-lg mr-3 flex-shrink-0">
-                  <span className="text-white font-bold text-lg">R</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-white font-bold text-lg mb-1">Hi there! 👋</h3>
-                  <p className="text-gray-300 text-sm">I'm Rahul, your wellness trainer</p>
-                </div>
-              </div>
-
-              {/* Message */}
-              <p className="text-gray-200 text-sm mb-6 leading-relaxed">
-                Welcome to LeoFit360! I'm here to help transform your workplace wellness. 
-                Ready to create a healthier, more productive team?
-              </p>
-
-              {/* Action buttons */}
-              <div className="flex flex-col gap-3">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleBookProgram}
-                  className="w-full px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 text-sm flex items-center justify-center"
-                >
-                  Book a Program
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </motion.button>
-                
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={closeTrainerGreeting}
-                  className="w-full px-4 py-3 border border-gray-500 text-gray-300 font-semibold rounded-xl hover:border-gray-400 hover:text-gray-200 transition-all duration-300 text-sm"
-                >
-                  Browse Programs
-                </motion.button>
-              </div>
-
-              {/* Small indicator dot */}
-              <div className="absolute -top-2 -right-2 w-4 h-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-pulse"></div>
-            </div>
-          </motion.div>
-        </div>
-      )}
+      {/* Trainer Greeting Popup Removed */}
     </div>
   );
-}
+} 
