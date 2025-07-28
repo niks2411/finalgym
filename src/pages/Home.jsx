@@ -280,27 +280,24 @@ export default function Home() {
   const [showScroll, setShowScroll] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [showTrainerPopup, setShowTrainerPopup] = useState(false);
-  
-  // Ref for the programs section
   const programsRef = useRef(null);
 
   // Navigation function to contact page
   const handleBookProgram = (program = null) => {
-    // Store the selected program in a variable for the contact page to access
+    // Store the selected program in localStorage for the contact page to access
     if (program) {
-      // In a real app, you'd use state management or localStorage
-      console.log('Selected program:', program);
+      localStorage.setItem('selectedProgram', JSON.stringify(program));
     }
     
     // Navigate to contact page (you'll need to implement this based on your routing)
     // This could be React Router, Next.js router, or simple window.location
-    alert('Navigating to contact page...'); // Replace with actual navigation
+    window.location.href = '/contact'; // or use your routing method
   };
 
-  // Function to scroll to programs section
-  const scrollToPrograms = () => {
+  // Smooth scroll to programs section
+  const handleLearnMore = () => {
     if (programsRef.current) {
-      programsRef.current.scrollIntoView({ 
+      programsRef.current.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
@@ -399,7 +396,7 @@ export default function Home() {
             </motion.button>
 
             <button 
-              onClick={scrollToPrograms}
+              onClick={handleLearnMore}
               className="px-12 py-5 text-lg font-bold border-2 border-purple-600 text-purple-400 rounded-2xl hover:bg-purple-600 hover:text-white transition-all duration-500 hover:scale-105"
             >
               Learn More
